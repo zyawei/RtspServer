@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A class for streaming H.264 from the camera of an android device using RTP.
  * You should use a {@link Session} instantiated with {@link SessionBuilder} instead of using this class directly.
- * Call {@link #setDestinationAddress(InetAddress)}, {@link #setDestinationPorts(int)} and {@link #setVideoQuality(VideoQuality)}
+ *  {@link #setDestinationPorts(int)} and {@link #setVideoQuality(VideoQuality)}
  * to configure the stream. You can then call {@link #start()} to start the RTP stream.
  * Call {@link #stop()} to stop the stream.
  */
@@ -82,7 +82,9 @@ public class H264Stream extends VideoStream {
 	 */
 	@Override
 	public synchronized String getSessionDescription() throws IllegalStateException {
-		if (mConfig == null) throw new IllegalStateException("You need to call configure() first !");
+		if (mConfig == null) {
+			throw new IllegalStateException("You need to call configure() first !");
+		}
 		return "m=video "+String.valueOf(getDestinationPorts()[0])+" RTP/AVP 96\r\n" +
 		"a=rtpmap:96 H264/90000\r\n" +
 		"a=fmtp:96 packetization-mode=1;profile-level-id="+mConfig.getProfileLevel()+";sprop-parameter-sets="+mConfig.getB64SPS()+","+mConfig.getB64PPS()+";\r\n";
@@ -120,8 +122,11 @@ public class H264Stream extends VideoStream {
 	 * and determines the pps and sps. Should not be called by the UI thread.
 	 **/
 	private MP4Config testH264() throws IllegalStateException, IOException {
-		if (mMode != MODE_MEDIARECORDER_API) return testMediaCodecAPI();
-		else return testMediaRecorderAPI();
+		if (mMode != MODE_MEDIARECORDER_API) {
+			return testMediaCodecAPI();
+		} else {
+			return testMediaRecorderAPI();
+		}
 	}
 
 	@SuppressLint("NewApi")
@@ -181,21 +186,17 @@ public class H264Stream extends VideoStream {
 			lockCamera();
 			try {
 				mCamera.stopPreview();
-			} catch (Exception e) {}
+			} catch (Exception ignored) {}
 			mPreviewStarted = false;
 		}
-
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 		unlockCamera();
-
 		try {
-			
 			mMediaRecorder = new MediaRecorder();
 			mMediaRecorder.setCamera(mCamera);
 			mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
@@ -210,6 +211,7 @@ public class H264Stream extends VideoStream {
 			
 			// We wait a little and stop recording
 			mMediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+				@Override
 				public void onInfo(MediaRecorder mr, int what, int extra) {
 					Log.d(TAG,"MediaRecorder callback called !");
 					if (what==MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
@@ -248,7 +250,9 @@ public class H264Stream extends VideoStream {
 			mMediaRecorder.release();
 			mMediaRecorder = null;
 			lockCamera();
-			if (!cameraOpen) destroyCamera();
+			if (!cameraOpen) {
+				destroyCamera();
+			}
 			// Restore flash state
 			mFlashEnabled = savedFlashState;
 		}
@@ -258,17 +262,16 @@ public class H264Stream extends VideoStream {
 
 		// Delete dummy video
 		File file = new File(TESTFILE);
-		if (!file.delete()) Log.e(TAG,"Temp file could not be erased");
-
+		if (!file.delete()) {
+			Log.e(TAG,"Temp file could not be erased");
+		}
 		Log.i(TAG,"H264 Test succeded...");
-
 		// Save test result
 		if (mSettings != null) {
 			Editor editor = mSettings.edit();
 			editor.putString(key, config.getProfileLevel()+","+config.getB64SPS()+","+config.getB64PPS());
 			editor.commit();
 		}
-
 		return config;
 
 	}

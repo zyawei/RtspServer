@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2011-2014 GUIGUI Simon, fyhertz@gmail.com
- * 
+ *
  * This file is part of libstreaming (https://github.com/fyhertz/libstreaming)
- * 
+ *
  * Spydroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This source code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -28,17 +28,17 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A class that represents the quality of a video stream. 
+ * A class that represents the quality of a video stream.
  * It contains the resolution, the framerate (in fps) and the bitrate (in bps) of the stream.
  */
 public class VideoQuality {
 
 	public final static String TAG = "VideoQuality";
-	
-	/** Default video stream quality. */
-	public final static VideoQuality DEFAULT_VIDEO_QUALITY = new VideoQuality(320,240,8,500000);
 
-	/**	Represents a quality for a video stream. */ 
+	/** Default video stream quality. */
+	public final static VideoQuality DEFAULT_VIDEO_QUALITY = new VideoQuality(640,480,6,500000);
+
+	/**	Represents a quality for a video stream. */
 	public VideoQuality() {}
 
 	/**
@@ -49,14 +49,14 @@ public class VideoQuality {
 	public VideoQuality(int resX, int resY) {
 		this.resX = resX;
 		this.resY = resY;
-	}	
+	}
 
 	/**
 	 * Represents a quality for a video stream.
 	 * @param resX The horizontal resolution
 	 * @param resY The vertical resolution
 	 * @param framerate The framerate in frame per seconds
-	 * @param bitrate The bitrate in bit per seconds 
+	 * @param bitrate The bitrate in bit per seconds
 	 */
 	public VideoQuality(int resX, int resY, int framerate, int bitrate) {
 		this.framerate = framerate;
@@ -97,9 +97,9 @@ public class VideoQuality {
 		return quality;
 	}
 
-	/** 
+	/**
 	 * Checks if the requested resolution is supported by the camera.
-	 * If not, it modifies it by supported parameters. 
+	 * If not, it modifies it by supported parameters.
 	 **/
 	public static VideoQuality determineClosestSupportedResolution(Camera.Parameters parameters, VideoQuality quality) {
 		VideoQuality v = quality.clone();
@@ -120,7 +120,7 @@ public class VideoQuality {
 		if (quality.resX != v.resX || quality.resY != v.resY) {
 			Log.v(TAG,"Resolution modified: "+quality.resX+"x"+quality.resY+"->"+v.resX+"x"+v.resY);
 		}
-		
+
 		return v;
 	}
 
@@ -132,11 +132,11 @@ public class VideoQuality {
 			int[] interval = it.next();
 			supportedFpsRangesStr += interval[0]/1000+"-"+interval[1]/1000+"fps"+(it.hasNext()?", ":"");
 			if (interval[1]>maxFps[1] || (interval[0]>maxFps[0] && interval[1]==maxFps[1])) {
-				maxFps = interval; 
+				maxFps = interval;
 			}
 		}
 		Log.v(TAG,supportedFpsRangesStr);
 		return maxFps;
 	}
-	
+
 }

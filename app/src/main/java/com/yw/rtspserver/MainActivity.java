@@ -7,6 +7,7 @@ import android.view.View;
 
 import net.majorkernelpanic.streaming.SessionBuilder;
 import net.majorkernelpanic.streaming.gl.SurfaceView;
+import net.majorkernelpanic.streaming.rtsp.RtspServer;
 import net.majorkernelpanic.streaming.video.VideoQuality;
 
 public class MainActivity extends Activity {
@@ -25,6 +26,19 @@ public class MainActivity extends Activity {
                 .setCamera(0)
                 .setContext(getApplicationContext());
 
-        startService(new Intent(this, CustomRtspServer.class));
+        findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(new Intent(MainActivity.this, RtspServer.class));
+            }
+        });
+        findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(MainActivity.this, RtspServer.class));
+            }
+        });
+
+
     }
 }

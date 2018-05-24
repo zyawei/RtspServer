@@ -213,6 +213,7 @@ public class RtspServer extends Service {
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 mListenerThread = null;
             }
@@ -259,20 +260,19 @@ public class RtspServer extends Service {
 
     @Override
     public void onCreate() {
-
+        Log.i(TAG, "onCreate: !!!!!!!!!");
         // Let's restore the state of the service
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPort = Integer.parseInt(mSharedPreferences.getString(KEY_PORT, String.valueOf(mPort)));
         mEnabled = mSharedPreferences.getBoolean(KEY_ENABLED, mEnabled);
-
         // If the configuration is modified, the server will adjust
         mSharedPreferences.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
-
         start();
     }
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "onDestroy: !!!!!!!!!");
         stop();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
     }
@@ -387,7 +387,6 @@ public class RtspServer extends Service {
 
             }
         }
-
     }
 
     // One thread per client

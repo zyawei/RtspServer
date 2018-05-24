@@ -163,7 +163,5 @@ abstract public class AbstractPacketizer {
 			duration += l;
 			return l;
 		}
-
 	}
-	
 }

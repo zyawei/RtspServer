@@ -201,6 +201,7 @@ public abstract class MediaStream implements Stream {
 	 * Indicates if the {@link MediaStream} is streaming.
 	 * @return A boolean indicating if the {@link MediaStream} is streaming
 	 */
+	@Override
 	public boolean isStreaming() {
 		return mStreaming;
 	}
@@ -213,7 +214,9 @@ public abstract class MediaStream implements Stream {
 	 */
 	@Override
 	public synchronized void configure() throws IllegalStateException, IOException {
-		if (mStreaming) throw new IllegalStateException("Can't be called while streaming.");
+		if (mStreaming) {
+			throw new IllegalStateException("Can't be called while streaming.");
+		}
 		mMode = mRequestedMode;
 		mConfigured = true;
 	}
@@ -222,11 +225,14 @@ public abstract class MediaStream implements Stream {
 	@Override
 	public synchronized void start() throws IllegalStateException, IOException {
 		
-		if (mDestination==null)
+		if (mDestination==null){
 			throw new IllegalStateException("No destination ip address set for the stream !");
 
-		if (mRtpPort<=0 || mRtcpPort<=0)
+		}
+
+		if (mRtpPort<=0 || mRtcpPort<=0) {
 			throw new IllegalStateException("No destination ports set for the stream !");
+		}
 
 		mPacketizer.setTimeToLive(mTTL);
 		

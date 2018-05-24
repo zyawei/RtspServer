@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.majorkernelpanic.streaming" />
+    package="net.majorkernelpanic.streaming">
+
+    <application>
+        <service android:name=".rtsp.RtspServer" />
+    </application>
+</manifest>

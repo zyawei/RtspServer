@@ -60,11 +60,10 @@ public class UriParser {
 	 * <li>rtsp://xxx.xxx.xxx.xxx:8086?h264=200-20-320-240</li>
 	 * <li>rtsp://xxx.xxx.xxx.xxx:8086?aac</li></ul>
 	 * @param uri The URI
-	 * @throws IllegalStateException
-	 * @throws IOException
+	 * @throws IllegalStateException asd
 	 * @return A Session configured according to the URI
 	 */
-	public static Session parse(String uri) throws IllegalStateException, IOException {		
+	public static Session parse(String uri) throws IllegalStateException {
 		SessionBuilder builder = SessionBuilder.getInstance().clone();
 		byte audioApi = 0, videoApi = 0;
 
@@ -179,9 +178,7 @@ public class UriParser {
 					AudioQuality quality = AudioQuality.parseQuality(param.getValue());
 					builder.setAudioQuality(quality).setAudioEncoder(AUDIO_AAC);
 				}
-
 			}
-
 		}
 
 		if (builder.getVideoEncoder()==VIDEO_NONE && builder.getAudioEncoder()==AUDIO_NONE) {

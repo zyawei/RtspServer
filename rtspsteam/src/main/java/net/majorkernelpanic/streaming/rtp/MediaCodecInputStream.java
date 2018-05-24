@@ -64,6 +64,7 @@ public class MediaCodecInputStream extends InputStream {
 		return 0;
 	}
 
+	@SuppressLint("WrongConstant")
 	@Override
 	public int read(byte[] buffer, int offset, int length) throws IOException {
 		int min = 0;
@@ -92,7 +93,9 @@ public class MediaCodecInputStream extends InputStream {
 				}			
 			}
 			
-			if (mClosed) throw new IOException("This InputStream was closed");
+			if (mClosed) {
+				throw new IOException("This InputStream was closed");
+			}
 			
 			min = length < mBufferInfo.size - mBuffer.position() ? length : mBufferInfo.size - mBuffer.position(); 
 			mBuffer.get(buffer, offset, min);
@@ -108,11 +111,13 @@ public class MediaCodecInputStream extends InputStream {
 		return min;
 	}
 	
+	@Override
 	public int available() {
-		if (mBuffer != null) 
+		if (mBuffer != null) {
 			return mBufferInfo.size - mBuffer.position();
-		else 
+		} else {
 			return 0;
+		}
 	}
 
 	public BufferInfo getLastBufferInfo() {
