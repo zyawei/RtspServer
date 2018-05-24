@@ -1,2 +1,21 @@
-# rtsp server
-从 https://github.com/fyhertz/spydroid-ipcamera 中截取 rtsp 部分.
+# about
+    
+    Select rtsp section from https://github.com/fyhertz/spydroid-ipcamera.
+    
+# how to
+
+- Step 1. Add the JitPack repository to your build file
+  
+      allprojects {
+            repositories {
+                ...
+                maven { url 'https://jitpack.io' }
+            }
+      }
+      
+      
+- Step 2. Add the dependency
+    
+      dependencies {
+            implementation 'com.github.zyawei:RtspServer:1.0.0'
+      }        
